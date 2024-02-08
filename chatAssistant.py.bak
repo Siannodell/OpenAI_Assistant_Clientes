@@ -13,7 +13,7 @@ from reportlab.pdfgen import canvas
 
 load_dotenv()
 #id do assistente
-assistant_id = "asst_J7d1eRxcBYzkVk6MtNuXA2Zi"
+assistant_id = "asst_PeSYlhe0cOtt8YgGczwhnKJ2"
 
 # inicializa cliente openai
 client = openai
