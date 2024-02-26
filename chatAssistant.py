@@ -71,6 +71,8 @@ perguntas = [
     "Sugestão de pergunta 3",
 ]
 
+pergunta_ = ""
+
 st.sidebar.write("<a style='color:white'  href='https://www.google.com.br/' id='baixarArquivo'>[Baixe o arquivo para fazer a análise]</a>", unsafe_allow_html=True)
 
 uploaded_file = st.sidebar.file_uploader("Envie um arquivo", key="file_uploader")
@@ -122,7 +124,7 @@ if st.session_state.start_chat:
         for indice, pergunta in enumerate(perguntas):
             # st.sidebar.write(f"<a style=\"color:white;display:flex;align-items:center;gap:26px;text-decoration:none\" target=\"_self\" id=\"pergunta{indice}\" href=\"javascript:(function(){{var conteudo = document.getElementById('pergunta{indice}').innerText; navigator.clipboard.writeText(conteudo).then(function() {{ console.log('Conteúdo copiado para a área de transferência: ' + conteudo); }}, function(err) {{ console.error('Erro ao copiar conteúdo: ', err); }});}})()\">{pergunta}<span>{icon_copy}</span></a>", unsafe_allow_html=True)
             if st.sidebar.button(f"{pergunta} {icon_copy}"):
-                copy_to_clipboard(pergunta)
+                pergunta_ = pergunta
 
     st.sidebar.write('<style>label[data-baseweb="checkbox"] > div > div {background: #282828}</style>', unsafe_allow_html=True)
 
@@ -171,6 +173,8 @@ if st.session_state.start_chat:
 
     # Campo pro usuário escrever
     if prompt := st.chat_input("Faça uma pergunta!"):
+        if(pergunta_) :
+            st.session_state.messages.append({"role": "user", "content": pergunta_})
         # Adiciona as mensagens do usuário e mostra no chat
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
