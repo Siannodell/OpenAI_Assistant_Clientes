@@ -61,19 +61,21 @@ if api_key:
     openai.api_key = api_key
 
 my_js = """
-// Seleciona o elemento pelo ID, classe, tag ou qualquer seletor CSS válido
-var elemento = document.getElementById('open');
-
-// Verifica se o elemento foi encontrado
-if (elemento) {
-    // Adiciona um ouvinte de evento de clique ao elemento
-    elemento.addEventListener('click', function(event) {
-        // Coloque aqui o código que deseja executar quando o elemento for clicado
-        console.log('O elemento foi clicado!');
-    });
-} else {
-    console.error('Elemento não encontrado.');
-}
+setTimeout(function(){
+    // Seleciona o elemento pelo ID, classe, tag ou qualquer seletor CSS válido
+    var elemento = document.getElementById('open');
+    
+    // Verifica se o elemento foi encontrado
+    if (elemento) {
+        // Adiciona um ouvinte de evento de clique ao elemento
+        elemento.addEventListener('click', function(event) {
+            // Coloque aqui o código que deseja executar quando o elemento for clicado
+            console.log('O elemento foi clicado!');
+        });
+    } else {
+        console.error('Elemento não encontrado.');
+    }
+}, 2000)
 """
 
 # Wrapt the javascript as html code
