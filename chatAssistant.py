@@ -61,6 +61,23 @@ if api_key:
     openai.api_key = api_key
 
 # Execute your app
+icon_copy = """
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="white" height="80px" width="80px" version="1.1" viewBox="0 0 512 512" enable-background="new 0 0 512 512">
+  <g>
+    <g>
+      <path d="M480.6,109.1h-87.5V31.4c0-11.3-9.1-20.4-20.4-20.4H31.4C20.1,11,11,20.1,11,31.4v351c0,11.3,9.1,20.4,20.4,20.4h87.5    v77.7c0,11.3,9.1,20.4,20.4,20.4h341.3c11.3,0,20.4-9.1,20.4-20.4v-351C501,118.3,491.9,109.1,480.6,109.1z M51.8,362V51.8h300.4    v57.3H139.3c-11.3,0-20.4,9.1-20.4,20.4V362H51.8z M460.2,460.2H159.7V150h300.4V460.2z"/>
+      <path d="m233.3,254.4h155.8c11.3,0 20.4-9.1 20.4-20.4 0-11.3-9.1-20.4-20.4-20.4h-155.8c-11.3,0-20.4,9.1-20.4,20.4 0,11.2 9.1,20.4 20.4,20.4z"/>
+      <path d="m233.3,396.6h155.8c11.3,0 20.4-9.1 20.4-20.4 0-11.3-9.1-20.4-20.4-20.4h-155.8c-11.3,0-20.4,9.1-20.4,20.4 0,11.3 9.1,20.4 20.4,20.4z"/>
+    </g>
+  </g>
+</svg>
+"""
+
+perguntas = [
+    "Sugestão de pergunta 1",
+    "Sugestão de pergunta 2",
+    "Sugestão de pergunta 3",
+]
 
 st.sidebar.write("<a style='color:white'  href='https://www.google.com.br/' id='baixarArquivo'>[Baixe o arquivo para fazer a análise]</a>", unsafe_allow_html=True)
 
@@ -106,10 +123,9 @@ if st.sidebar.button("Iniciar chat"):
 on = st.sidebar.toggle('Ver sugestões de perguntas')
 
 if on:
-    st.sidebar.write('Pergunta 1')
-    st.sidebar.write('Pergunta 2')
-    st.sidebar.write('Pergunta 3')
-    st.sidebar.write('<a target="_self" id="pergunta1" href="javascript:(function(){var conteudo = document.getElementById(\'pergunta1\').innerText; console.log(conteudo);})()">Clique aqui para copiar</a>', unsafe_allow_html=True)
+    for indice, pergunta in enumerate(perguntas):
+        st.sidebar.write("<a target=\"_self\" id=\"pergunta{indice}\" href=\"javascript:(function(){var conteudo = document.getElementById(\'pergunta{indice}\').innerText; console.log(conteudo);})()\">{pergunta}</a>", unsafe_allow_html=True)
+
     st.sidebar.write('<style>.st-bx {background: #282828}</style>', unsafe_allow_html=True)
 
 # Define a função para iniciar
