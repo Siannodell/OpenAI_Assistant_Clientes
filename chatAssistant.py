@@ -119,14 +119,14 @@ if st.sidebar.button("Iniciar chat"):
         st.sidebar.warning("Por favor, selecione pelo menos um arquivo para iniciar o chat")
 
 
+if st.session_state.start_chat:
+    on = st.sidebar.toggle('Ver sugestões de perguntas')
 
-on = st.sidebar.toggle('Ver sugestões de perguntas')
+    if on:
+        for indice, pergunta in enumerate(perguntas):
+            st.sidebar.write(f"<a style=\"color:white;display:flex;align-items:center;gap:26px;text-decoration:none\" target=\"_self\" id=\"pergunta{indice}\" href=\"javascript:(function(){{var conteudo = document.getElementById(\'pergunta{indice}\').innerText; console.log(conteudo);}})()\">{pergunta}<span>{icon_copy}</span></a>", unsafe_allow_html=True)
 
-if on:
-    for indice, pergunta in enumerate(perguntas):
-        st.sidebar.write(f"<a style=\"color:white;display:flex;align-items:center;gap:26px;text-decoration:none\" target=\"_self\" id=\"pergunta{indice}\" href=\"javascript:(function(){{var conteudo = document.getElementById(\'pergunta{indice}\').innerText; console.log(conteudo);}})()\">{pergunta}<span>{icon_copy}</span></a>", unsafe_allow_html=True)
-
-    st.sidebar.write('<style>.st-bx {background: #282828}</style>', unsafe_allow_html=True)
+        st.sidebar.write('<style>.st-bx {background: #282828}</style>', unsafe_allow_html=True)
 
 # Define a função para iniciar
 def process_message_with_citations(message):
