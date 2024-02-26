@@ -62,15 +62,7 @@ if api_key:
 
 # Execute your app
 icon_copy = """
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="white" height="16px" width="16px" version="1.1" viewBox="0 0 512 512" enable-background="new 0 0 512 512">
-  <g>
-    <g>
-      <path d="M480.6,109.1h-87.5V31.4c0-11.3-9.1-20.4-20.4-20.4H31.4C20.1,11,11,20.1,11,31.4v351c0,11.3,9.1,20.4,20.4,20.4h87.5    v77.7c0,11.3,9.1,20.4,20.4,20.4h341.3c11.3,0,20.4-9.1,20.4-20.4v-351C501,118.3,491.9,109.1,480.6,109.1z M51.8,362V51.8h300.4    v57.3H139.3c-11.3,0-20.4,9.1-20.4,20.4V362H51.8z M460.2,460.2H159.7V150h300.4V460.2z"/>
-      <path d="m233.3,254.4h155.8c11.3,0 20.4-9.1 20.4-20.4 0-11.3-9.1-20.4-20.4-20.4h-155.8c-11.3,0-20.4,9.1-20.4,20.4 0,11.2 9.1,20.4 20.4,20.4z"/>
-      <path d="m233.3,396.6h155.8c11.3,0 20.4-9.1 20.4-20.4 0-11.3-9.1-20.4-20.4-20.4h-155.8c-11.3,0-20.4,9.1-20.4,20.4 0,11.3 9.1,20.4 20.4,20.4z"/>
-    </g>
-  </g>
-</svg>
+📋
 """
 
 perguntas = [
@@ -119,30 +111,22 @@ if st.sidebar.button("Iniciar chat"):
         st.sidebar.warning("Por favor, selecione pelo menos um arquivo para iniciar o chat")
 
 
+def copy_to_clipboard(text):
+    # Copiar o texto para a área de transferência
+    st.write(text, key="text_to_copy")
+
 if st.session_state.start_chat:
     on = st.sidebar.toggle('Ver sugestões de perguntas')
 
     if on:
         for indice, pergunta in enumerate(perguntas):
             st.sidebar.write(f"<a style=\"color:white;display:flex;align-items:center;gap:26px;text-decoration:none\" target=\"_self\" id=\"pergunta{indice}\" href=\"javascript:(function(){{var conteudo = document.getElementById('pergunta{indice}').innerText; navigator.clipboard.writeText(conteudo).then(function() {{ console.log('Conteúdo copiado para a área de transferência: ' + conteudo); }}, function(err) {{ console.error('Erro ao copiar conteúdo: ', err); }});}})()\">{pergunta}<span>{icon_copy}</span></a>", unsafe_allow_html=True)
+            if st.button(f"Copy: {pergunta} {icon_copy}"):
+                copy_to_clipboard(pergunta)
 
     st.sidebar.write('<style>.st-bx {background: #282828}</style>', unsafe_allow_html=True)
 
 # Função para copiar o texto para a área de transferência
-def copy_to_clipboard(text):
-    # Copiar o texto para a área de transferência
-    st.write(text, key="text_to_copy")
-
-# Obtendo a pergunta e o ícone
-pergunta = "Sua pergunta aqui"
-icon_copy = "📋"
-
-# Botão para copiar o texto
-if st.button(f"Copy: {pergunta} {icon_copy}"):
-    copy_to_clipboard(pergunta)
-
-# Exibindo a pergunta
-st.write(pergunta)
 
 # Define a função para iniciar
 def process_message_with_citations(message):
