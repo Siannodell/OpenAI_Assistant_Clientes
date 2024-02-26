@@ -111,6 +111,9 @@ if st.sidebar.button("Iniciar chat"):
         st.sidebar.warning("Por favor, selecione pelo menos um arquivo para iniciar o chat")
 
 
+def copy_to_clipboard(text):
+    # Copiar o texto para a área de transferência
+    st.write(text, key="text_to_copy")
 
 if st.session_state.start_chat:
     on = st.sidebar.toggle('Ver sugestões de perguntas')
