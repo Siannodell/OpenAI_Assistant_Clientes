@@ -171,49 +171,11 @@ if st.session_state.start_chat:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
-    if pergunta_ := st.chat_input("Faça uma pergunta!"):
-        # Adiciona as mensagens do usuário e mostra no chat
+
+    if(pergunta_) :
         st.session_state.messages.append({"role": "user", "content": pergunta_})
         with st.chat_message("user"):
             st.markdown(pergunta_)
-
-        # Adiciona as mensagens criadas na thread
-        client.beta.threads.messages.create(
-            thread_id=st.session_state.thread_id,
-            role="user",
-            content=pergunta_
-        )
-
-        # Cria a requisição com mais instruções
-        run = client.beta.threads.runs.create(
-            thread_id=st.session_state.thread_id,
-            assistant_id=assistant_id,
-            instructions="Por favor, responda as perguntas usando o conteúdo do arquivo. Quando adicionar informações externas, seja claro e mostre essas informações em outra cor."
-        )
-
-        # Pedido para finalizar a requisição e retornar as mensagens do assistente
-        while run.status != 'completed':
-            time.sleep(1)
-            run = client.beta.threads.runs.retrieve(
-                thread_id=st.session_state.thread_id,
-                run_id=run.id
-            )
-
-        # Retorna as mensagens do assistente
-        messages = client.beta.threads.messages.list(
-            thread_id=st.session_state.thread_id
-        )
-
-        # Processa e mostra as mensagens do assistente
-        assistant_messages_for_run = [
-            message for message in messages
-            if message.run_id == run.id and message.role == "assistant"
-        ]
-        for message in assistant_messages_for_run:
-            full_response = process_message_with_citations(message)
-            st.session_state.messages.append({"role": "assistant", "content": full_response})
-            with st.chat_message("assistant"):
-                st.markdown(full_response, unsafe_allow_html=True)
 
     # Campo pro usuário escrever
     if prompt := st.chat_input("Faça uma pergunta!"):
