@@ -107,6 +107,7 @@ on = st.sidebar.toggle('Ver sugestões de perguntas')
 
 if on:
     st.sidebar.write('Feature activated!')
+    st.sidebar.write('<style>.st-bx {background: #282828}</style>')
 
 # Define a função para iniciar
 def process_message_with_citations(message):
