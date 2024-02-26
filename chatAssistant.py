@@ -106,7 +106,10 @@ if st.sidebar.button("Iniciar chat"):
 on = st.sidebar.toggle('Ver sugestões de perguntas')
 
 if on:
-    st.sidebar.write('Feature activated!')
+    st.sidebar.write('Pergunta 1')
+    st.sidebar.write('Pergunta 2')
+    st.sidebar.write('Pergunta 3')
+    st.sidebar.write('Pergunta 4')
     st.sidebar.write('<style>.st-bx {background: #282828}</style>', unsafe_allow_html=True)
 
 # Define a função para iniciar
