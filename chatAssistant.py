@@ -60,24 +60,6 @@ api_key = st.secrets.OpenAIAPI.openai_api_key
 if api_key:
     openai.api_key = api_key
 
-my_js = """
-    // Seleciona o elemento pelo ID, classe, tag ou qualquer seletor CSS válido
-    var elemento = document.getElementById('open');
-    
-    // Verifica se o elemento foi encontrado
-    if (elemento) {
-        // Adiciona um ouvinte de evento de clique ao elemento
-        elemento.addEventListener('click', function(event) {
-            // Coloque aqui o código que deseja executar quando o elemento for clicado
-            console.log('O elemento foi clicado!');
-        });
-    } else {
-        console.error('Elemento não encontrado.');
-    }
-"""
-
-# Wrapt the javascript as html code
-my_html = f"<script>{my_js}</script>"
 # Execute your app
 
 st.sidebar.write("<a style='color:white'  href='https://www.google.com.br/' id='baixarArquivo'>[Baixe o arquivo para fazer a análise]</a>", unsafe_allow_html=True)
@@ -120,8 +102,11 @@ if st.sidebar.button("Iniciar chat"):
         st.sidebar.warning("Por favor, selecione pelo menos um arquivo para iniciar o chat")
 
 
-st.sidebar.write("<a href='#' id='open'>Ver sugestões de perguntas </a>", unsafe_allow_html=True)
-st.sidebar.write(my_html, unsafe_allow_html=True)
+
+on = st.sidebar.toggle('Ver sugestões de perguntas')
+
+if on:
+    st.write('Feature activated!')
 
 # Define a função para iniciar
 def process_message_with_citations(message):
