@@ -59,6 +59,15 @@ api_key = st.secrets.OpenAIAPI.openai_api_key
 if api_key:
     openai.api_key = api_key
 
+my_js = """
+alert("Hola mundo");
+"""
+
+# Wrapt the javascript as html code
+my_html = f"<script>{my_js}</script>"
+# Execute your app
+html(my_html)
+
 st.sidebar.write("<a style='color:white'  href='https://www.google.com.br/' id='baixarArquivo'>[Baixe o arquivo para fazer a análise]</a>", unsafe_allow_html=True)
 st.sidebar.write("<a href='#' id='open' onclick='openQuestions()'>Ver sugestões de perguntas </a>", unsafe_allow_html=True)
 
