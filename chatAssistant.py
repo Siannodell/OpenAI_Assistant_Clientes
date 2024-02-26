@@ -124,7 +124,7 @@ if st.session_state.start_chat:
             if st.sidebar.button(f"{pergunta} {icon_copy}"):
                 copy_to_clipboard(pergunta)
 
-    st.sidebar.write('<style>div[data-baseweb="checkbox"] > div > div {background: #282828}</style>', unsafe_allow_html=True)
+    st.sidebar.write('<style>label[data-baseweb="checkbox"] > div > div {background: #282828}</style>', unsafe_allow_html=True)
 
 # Função para copiar o texto para a área de transferência
 
