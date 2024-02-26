@@ -109,7 +109,7 @@ if on:
     st.sidebar.write('Pergunta 1')
     st.sidebar.write('Pergunta 2')
     st.sidebar.write('Pergunta 3')
-    st.sidebar.write('Pergunta 4')
+    st.sidebar.write('<a href="javascript:(function(){var conteudo = document.getElementById(\'idDoElemento\').innerText; console.log(conteudo);})()">Clique aqui para copiar</a>', unsafe_allow_html=True)
     st.sidebar.write('<style>.st-bx {background: #282828}</style>', unsafe_allow_html=True)
 
 # Define a função para iniciar
