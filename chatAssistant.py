@@ -106,7 +106,7 @@ if st.sidebar.button("Iniciar chat"):
 on = st.sidebar.toggle('Ver sugestões de perguntas')
 
 if on:
-    st.write('Feature activated!')
+    st.sidebar.write('Feature activated!')
 
 # Define a função para iniciar
 def process_message_with_citations(message):
