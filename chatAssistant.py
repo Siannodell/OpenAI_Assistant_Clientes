@@ -128,6 +128,22 @@ if st.session_state.start_chat:
 
     st.sidebar.write('<style>.st-bx {background: #282828}</style>', unsafe_allow_html=True)
 
+# Função para copiar o texto para a área de transferência
+def copy_to_clipboard(text):
+    # Copiar o texto para a área de transferência
+    st.write(text, key="text_to_copy")
+
+# Obtendo a pergunta e o ícone
+pergunta = "Sua pergunta aqui"
+icon_copy = "📋"
+
+# Botão para copiar o texto
+if st.button(f"Copy: {pergunta} {icon_copy}"):
+    copy_to_clipboard(pergunta)
+
+# Exibindo a pergunta
+st.write(pergunta)
+
 # Define a função para iniciar
 def process_message_with_citations(message):
     """Extract content and annotations from the message and format citations as footnotes."""
