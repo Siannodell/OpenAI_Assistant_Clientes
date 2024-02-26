@@ -172,9 +172,16 @@ if st.session_state.start_chat:
             st.markdown(message["content"])
 
 
-    prompt = st.chat_input("Faça uma pergunta!") | pergunta_
+    prompt_ =  st.chat_input("Faça uma pergunta!")
+
+    if pergunta_ :
+        prompt = pergunta_
+
+    if not pergunta_ :
+        prompt = prompt_
+
     # Campo pro usuário escrever
-    if prompt | pergunta_:
+    if prompt:
         # Adiciona as mensagens do usuário e mostra no chat
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
