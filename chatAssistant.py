@@ -5,6 +5,7 @@ import requests
 import pdfkit
 import time
 import os
+import html
 from dotenv import load_dotenv
 from openpyxl import load_workbook
 from reportlab.lib.pagesizes import letter
@@ -99,7 +100,15 @@ if st.sidebar.button("Iniciar chat"):
 
 
 st.sidebar.write("<a href='#' id='open' onclick='openQuestions()'>Ver sugestões de perguntas </a>", unsafe_allow_html=True)
+my_js = """
+alert("Hola mundo");
+"""
 
+# Wrapt the javascript as html code
+my_html = f"<script>{my_js}</script>"
+
+# Execute your app
+html(my_html)
 
 # Define a função para iniciar
 def process_message_with_citations(message):
