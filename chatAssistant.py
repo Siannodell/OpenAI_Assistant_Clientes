@@ -1,7 +1,6 @@
 import openai
 import streamlit as st
 from bs4 import BeautifulSoup
-from streamlit.components.v1 import html
 
 import requests
 import pdfkit
@@ -60,27 +59,6 @@ api_key = st.secrets.OpenAIAPI.openai_api_key
 if api_key:
     openai.api_key = api_key
 
-my_js = """
-setTimeout(function(){
-    // Seleciona o elemento pelo ID, classe, tag ou qualquer seletor CSS válido
-    var elemento = document.getElementById('open');
-    
-    // Verifica se o elemento foi encontrado
-    if (elemento) {
-        // Adiciona um ouvinte de evento de clique ao elemento
-        elemento.addEventListener('click', function(event) {
-            // Coloque aqui o código que deseja executar quando o elemento for clicado
-            console.log('O elemento foi clicado!');
-        });
-    } else {
-        console.error('Elemento não encontrado.');
-    }
-}, 10000)
-"""
-
-# Wrapt the javascript as html code
-my_html = f"<script>{my_js}</script>"
-# Execute your app
 
 st.sidebar.write("<a style='color:white'  href='https://www.google.com.br/' id='baixarArquivo'>[Baixe o arquivo para fazer a análise]</a>", unsafe_allow_html=True)
 
