@@ -100,7 +100,6 @@ if st.sidebar.button("Iniciar chat"):
 
 st.sidebar.write("<a href='#' id='open' onclick='openQuestions()'>Ver sugestões de perguntas </a>", unsafe_allow_html=True)
 
-st.markdown("<script>console.log('teste2')</script>", unsafe_allow_html=True)
 
 # Define a função para iniciar
 def process_message_with_citations(message):
