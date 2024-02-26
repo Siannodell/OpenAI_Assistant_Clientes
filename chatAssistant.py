@@ -61,7 +61,6 @@ if api_key:
     openai.api_key = api_key
 
 my_js = """
-setTimeout(function(){
     // Seleciona o elemento pelo ID, classe, tag ou qualquer seletor CSS válido
     var elemento = document.getElementById('open');
     
@@ -75,7 +74,6 @@ setTimeout(function(){
     } else {
         console.error('Elemento não encontrado.');
     }
-}, 10000)
 """
 
 # Wrapt the javascript as html code
