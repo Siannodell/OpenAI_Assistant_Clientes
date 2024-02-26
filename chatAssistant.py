@@ -75,7 +75,7 @@ setTimeout(function(){
     } else {
         console.error('Elemento não encontrado.');
     }
-}, 2000)
+}, 10000)
 """
 
 # Wrapt the javascript as html code
