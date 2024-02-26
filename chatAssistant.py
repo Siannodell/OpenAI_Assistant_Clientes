@@ -124,7 +124,7 @@ on = st.sidebar.toggle('Ver sugestões de perguntas')
 
 if on:
     for indice, pergunta in enumerate(perguntas):
-        st.sidebar.write(f"<a target=\"_self\" id=\"pergunta{indice}\" href=\"javascript:(function(){{var conteudo = document.getElementById(\'pergunta{indice}\').innerText; console.log(conteudo);}})()\">{pergunta}</a>", unsafe_allow_html=True)
+        st.sidebar.write(f"<a style=\"display:flex;align-items:center;justify-content:space-between;text-decoration:none\" target=\"_self\" id=\"pergunta{indice}\" href=\"javascript:(function(){{var conteudo = document.getElementById(\'pergunta{indice}\').innerText; console.log(conteudo);}})()\">{pergunta}<span>{icon_copy}</span></a>", unsafe_allow_html=True)
 
     st.sidebar.write('<style>.st-bx {background: #282828}</style>', unsafe_allow_html=True)
 
