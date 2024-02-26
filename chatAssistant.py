@@ -123,7 +123,7 @@ if st.sidebar.button("Iniciar chat"):
 
 
 st.sidebar.write("<a href='#' id='open'>Ver sugestões de perguntas </a>", unsafe_allow_html=True)
-html(my_html)
+st.sidebar.write(my_js, unsafe_allow_html=True)
 
 # Define a função para iniciar
 def process_message_with_citations(message):
