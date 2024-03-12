@@ -11,7 +11,8 @@ from dotenv import load_dotenv
 from openpyxl import load_workbook
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-
+from io import BytesIO
+import urllib
 
 load_dotenv()
 #id do assistente
@@ -32,7 +33,13 @@ if "thread_id" not in st.session_state:
 
 # titulo e icone da página
 # Função para converter XLSX pra PDF
+
+def download_file(file) :
+    file = urllib.request.urlopen(file).read()
+    return BytesIO(file.content)
+
 def convert_xlsx_to_pdf(input_path, output_path):
+
     workbook = load_workbook(input_path)
     sheets = workbook.sheetnames
 
@@ -74,8 +81,8 @@ perguntas = [
 pergunta_ = ""
 st.sidebar.write("<a style='color:white'  href='https://www.google.com.br/' id='baixarArquivo'>[Baixe o arquivo para fazer a análise]</a>", unsafe_allow_html=True)
 
-uploaded_file = st.sidebar.file_uploader("Envie um arquivo", key="file_uploader")
-#uploaded_file = "https://tecnologia2.chleba.net/_ftp/chatgpt/BotasVentoPedidos.xlsx"
+#uploaded_file = st.sidebar.file_uploader("Envie um arquivo", key="file_uploader")
+uploaded_file = download_file("https://tecnologia2.chleba.net/_ftp/chatgpt/BotasVentoPedidos.xlsx")
 if st.sidebar.button("Enviar arquivo"):
     if uploaded_file:
         # Converter XLSX para PDF
