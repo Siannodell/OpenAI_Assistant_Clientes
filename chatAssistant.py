@@ -36,7 +36,7 @@ if "thread_id" not in st.session_state:
 
 def download_file(file) :
     file = urllib.request.urlopen(file).read()
-    return BytesIO(file.content)
+    return BytesIO(file)
 
 def convert_xlsx_to_pdf(input_path, output_path):
 
