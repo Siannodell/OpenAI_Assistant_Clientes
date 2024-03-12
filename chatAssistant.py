@@ -74,9 +74,9 @@ perguntas = [
 pergunta_ = ""
 st.sidebar.write("<a style='color:white'  href='https://www.google.com.br/' id='baixarArquivo'>[Baixe o arquivo para fazer a análise]</a>", unsafe_allow_html=True)
 
-# uploaded_file = st.sidebar.file_uploader("Envie um arquivo", key="file_uploader")
-uploaded_file = "https://tecnologia2.chleba.net/_ftp/chatgpt/BotasVentoPedidos.xlsx";
-if st.sidebar.button("Começar"):
+uploaded_file = st.sidebar.file_uploader("Envie um arquivo", key="file_uploader")
+#uploaded_file = "https://tecnologia2.chleba.net/_ftp/chatgpt/BotasVentoPedidos.xlsx"
+if st.sidebar.button("Enviar arquivo"):
     if uploaded_file:
         # Converter XLSX para PDF
         pdf_output_path = "converted_file.pdf"
