@@ -83,7 +83,12 @@ st.sidebar.write("<a style='color:white'  href='https://www.google.com.br/' id='
 
 #uploaded_file = st.sidebar.file_uploader("Envie um arquivo", key="file_uploader")
 uploaded_file = download_file("https://tecnologia2.chleba.net/_ftp/chatgpt/BotasVentoPedidos.xlsx")
-if st.sidebar.button("Enviar arquivo"):
+
+
+
+# Botão para iniciar o chat
+if st.sidebar.button("Iniciar chat"):
+
     if uploaded_file:
         # Converter XLSX para PDF
         pdf_output_path = "converted_file.pdf"
@@ -91,23 +96,21 @@ if st.sidebar.button("Enviar arquivo"):
 
         # Enviar o arquivo convertido
         additional_file_id = upload_to_openai(pdf_output_path)
-        
+
         st.session_state.file_id_list.append(additional_file_id)
         st.sidebar.write(f"ID do arquivo: {additional_file_id}")
-        
-# Mostra os ids
-if st.session_state.file_id_list:
-    st.sidebar.write("IDs dos arquivos enviados:")
-    for file_id in st.session_state.file_id_list:
-        st.sidebar.write(file_id)
-        # Associa os arquivos ao assistente
-        assistant_file = client.beta.assistants.files.create(
-            assistant_id=assistant_id, 
-            file_id=file_id
-        )
 
-# Botão para iniciar o chat
-if st.sidebar.button("Iniciar chat"):
+    # Mostra os ids
+    if st.session_state.file_id_list:
+        st.sidebar.write("IDs dos arquivos enviados:")
+        for file_id in st.session_state.file_id_list:
+            st.sidebar.write(file_id)
+            # Associa os arquivos ao assistente
+            assistant_file = client.beta.assistants.files.create(
+                assistant_id=assistant_id,
+                file_id=file_id
+            )
+
     # Verifica se o arquivo foi upado antes de iniciar
     if st.session_state.file_id_list:
         st.session_state.start_chat = True
