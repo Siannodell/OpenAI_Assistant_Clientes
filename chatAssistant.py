@@ -82,20 +82,19 @@ pergunta_ = ""
 st.sidebar.write("<a style='color:white'  href='https://www.google.com.br/' id='baixarArquivo'>[Baixe o arquivo para fazer a análise]</a>", unsafe_allow_html=True)
 
 #uploaded_file = st.sidebar.file_uploader("Envie um arquivo", key="file_uploader")
-uploaded_file = download_file("https://tecnologia2.chleba.net/_ftp/chatgpt/BotasVentoPedidos.xlsx")
+uploaded_file = download_file("https://tecnologia2.chleba.net/_ftp/chatgpt/BotasVentoPedidos.csv")
 
 
 
 # Botão para iniciar o chat
 if st.sidebar.button("Iniciar chat"):
-
     if uploaded_file:
         # Converter XLSX para PDF
-        pdf_output_path = "converted_file.pdf"
-        convert_xlsx_to_pdf(uploaded_file, pdf_output_path)
+        #pdf_output_path = "converted_file.pdf"
+        #convert_xlsx_to_pdf(uploaded_file, pdf_output_path)
 
         # Enviar o arquivo convertido
-        additional_file_id = upload_to_openai(pdf_output_path)
+        additional_file_id = upload_to_openai(uploaded_file)
 
         st.session_state.file_id_list.append(additional_file_id)
         st.sidebar.write(f"ID do arquivo: {additional_file_id}")
@@ -106,6 +105,7 @@ if st.sidebar.button("Iniciar chat"):
         for file_id in st.session_state.file_id_list:
             st.sidebar.write(file_id)
             # Associa os arquivos ao assistente
+
             assistant_file = client.beta.assistants.files.create(
                 assistant_id=assistant_id,
                 file_id=file_id
