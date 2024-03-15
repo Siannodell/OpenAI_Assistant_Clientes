@@ -60,12 +60,11 @@ def convert_xlsx_to_pdf(input_path, output_path):
 
 
 perguntas = [
-    "Qual faixa etária apresentou o maior volume de pedidos e qual foi o valor médio destes pedidos?",
-    "Há diferenças significativas nos padrões de compra entre os diferentes gêneros listados no documento?",
-    "Qual foi o ticket médio dos pedidos aprovados comparado com os pedidos não aprovados? Isso pode indicar alguma tendência ou comportamento específico dos consumidores?",
-    "Qual é a taxa de aprovação dos pedidos recebidos e como ela se distribui entre as diferentes cidades ou estados?",
-    "A localização impacta o valor médio dos pedidos ou a preferência por formas de pagamento?",
-    "Comparando os dados de agosto de 2023 com meses anteriores, existe alguma tendência de crescimento ou decréscimo nas transações?",
+    "Qual é o valor médio de compra mais frequente?",
+    "Quais são as faixas etárias mais comuns entre os clientes?",
+    "Qual é o estado (UF) com a maior quantidade de clientes ativos?",
+    "Existe alguma relação entre o gênero dos clientes e a recência de compra?",
+    "Qual é a cidade com o maior número de clientes novos?"
 ]
 
 pergunta_ = ""
