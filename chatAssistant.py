@@ -71,6 +71,8 @@ pergunta_ = ""
 
 st.sidebar.write('<style>p, ol, ul, dl {font-size:0.9rem}</style>', unsafe_allow_html=True)
 
+
+
 def getImage(file_id) :
     image_file_id = file_id
     image_file = openai.files.content(image_file_id)
