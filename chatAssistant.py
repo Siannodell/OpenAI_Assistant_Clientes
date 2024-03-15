@@ -1,8 +1,10 @@
+import base64
+
 import openai
 import streamlit as st
 from bs4 import BeautifulSoup
+from faker.decode import unidecode
 from streamlit.components.v1 import html
-
 import requests
 import pdfkit
 import time
@@ -12,11 +14,13 @@ from openpyxl import load_workbook
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from io import BytesIO
+from PIL import Image
 import urllib
+import pandas as pd
 
 load_dotenv()
 #id do assistente
-assistant_id = "asst_PeSYlhe0cOtt8YgGczwhnKJ2"
+assistant_id = "asst_519rR4UyOVXn2Epn8qR7RSa8"
 
 # inicializa cliente openai
 client = openai
@@ -34,12 +38,12 @@ if "thread_id" not in st.session_state:
 # titulo e icone da página
 # Função para converter XLSX pra PDF
 
-def download_file(file) :
-    file = urllib.request.urlopen(file).read()
-    return BytesIO(file)
+def convert_xlsx_to_json(input_path, output_path) :
+    read_file = pd.read_excel(input_path)
+
+    read_file.to_json(output_path)
 
 def convert_xlsx_to_pdf(input_path, output_path):
-
     workbook = load_workbook(input_path)
     sheets = workbook.sheetnames
 
@@ -54,6 +58,30 @@ def convert_xlsx_to_pdf(input_path, output_path):
 
     pdf.save()
 
+
+perguntas = [
+    "Qual faixa etária apresentou o maior volume de pedidos e qual foi o valor médio destes pedidos?",
+    "Há diferenças significativas nos padrões de compra entre os diferentes gêneros listados no documento?",
+    "Qual foi o ticket médio dos pedidos aprovados comparado com os pedidos não aprovados? Isso pode indicar alguma tendência ou comportamento específico dos consumidores?",
+    "Qual é a taxa de aprovação dos pedidos recebidos e como ela se distribui entre as diferentes cidades ou estados?",
+    "A localização impacta o valor médio dos pedidos ou a preferência por formas de pagamento?",
+    "Comparando os dados de agosto de 2023 com meses anteriores, existe alguma tendência de crescimento ou decréscimo nas transações?",
+]
+
+pergunta_ = ""
+
+
+def getImage(file_id) :
+    image_file_id = file_id
+    image_file = openai.files.content(image_file_id)
+    bites = BytesIO(base64.b64decode(image_file.content))
+    aux_im = Image.open(BytesIO(image_file.content))
+    return aux_im
+
+def download_file(file) :
+    file = urllib.request.urlopen(file).read()
+    return BytesIO(file)
+
 # Função pra enviar arquivo convertido pra OpenAI
 def upload_to_openai(filepath):
     with open(filepath, "rb") as file:
@@ -64,81 +92,60 @@ def upload_to_openai(filepath):
 #api_key = os.getenv("OPENAI_API_KEY")
 #git
 api_key = st.secrets.OpenAIAPI.openai_api_key
+
 if api_key:
     openai.api_key = api_key
 
-# Execute your app
-icon_copy = """
-📋
-"""
-
-perguntas = [
-    "Sugestão de pergunta 1",
-    "Sugestão de pergunta 2",
-    "Sugestão de pergunta 3",
-]
-
-pergunta_ = ""
-st.sidebar.write("<a style='color:white'  href='https://www.google.com.br/' id='baixarArquivo'>[Baixe o arquivo para fazer a análise]</a>", unsafe_allow_html=True)
+#st.sidebar.write("<a style='color:white'  href='https://tecnologia2.chleba.net/_ftp/chatgpt/BotasVentoPedidos.xlsx' id='baixarArquivo'>[Baixe o arquivo para fazer a análise]</a>", unsafe_allow_html=True)
 
 #uploaded_file = st.sidebar.file_uploader("Envie um arquivo", key="file_uploader")
-uploaded_file = download_file("https://tecnologia2.chleba.net/_ftp/chatgpt/BotasVentoPedidos.csv")
-
-
-
+uploaded_file = download_file("https://tecnologia2.chleba.net/_ftp/chatgpt/BotasVentoPedidos.xlsx")
 # Botão para iniciar o chat
-if st.sidebar.button("Iniciar chat"):
-    if uploaded_file:
-        # Converter XLSX para PDF
-        #pdf_output_path = "converted_file.pdf"
-        #convert_xlsx_to_pdf(uploaded_file, pdf_output_path)
 
-        # Enviar o arquivo convertido
-        additional_file_id = upload_to_openai(uploaded_file)
+if not st.session_state.start_chat:
+    if True:
+        #if uploaded_file:
+        ds = client.beta.assistants.files.list(assistant_id=assistant_id)
+        if ds:
+            for file in ds:
+                st.session_state.file_id_list.append(file.id)
+            #st.sidebar.write(f"ID do arquivo: {additional_file_id}")
 
-        st.session_state.file_id_list.append(additional_file_id)
-        st.sidebar.write(f"ID do arquivo: {additional_file_id}")
-
-    # Mostra os ids
-    if st.session_state.file_id_list:
-        st.sidebar.write("IDs dos arquivos enviados:")
-        for file_id in st.session_state.file_id_list:
-            st.sidebar.write(file_id)
-            # Associa os arquivos ao assistente
-
-            assistant_file = client.beta.assistants.files.create(
-                assistant_id=assistant_id,
-                file_id=file_id
-            )
-
-    # Verifica se o arquivo foi upado antes de iniciar
-    if st.session_state.file_id_list:
-        st.session_state.start_chat = True
-        # Cria a thread e guarda o id na sessão
-        thread = client.beta.threads.create()
-        st.session_state.thread_id = thread.id
-        st.write("id da thread: ", thread.id)
-    else:
-        st.sidebar.warning("Por favor, selecione pelo menos um arquivo para iniciar o chat")
+        # Mostra os ids
+        if st.session_state.file_id_list:
+            #st.sidebar.write("IDs dos arquivos enviados:")
+            for file_id in st.session_state.file_id_list:
+                #st.sidebar.write(file_id)
+                # Associa os arquivos ao assistente
+                assistant_file = client.beta.assistants.files.create(
+                    assistant_id=assistant_id,
+                    file_id=file_id
+                )
 
 
-def copy_to_clipboard(text):
-    # Copiar o texto para a área de transferência
-    st.write(text, key="text_to_copy")
+        # Verifica se o arquivo foi upado antes de iniciar
+        if st.session_state.file_id_list:
+            st.session_state.start_chat = True
+            # Cria a thread e guarda o id na sessão
+            thread = client.beta.threads.create()
+            st.session_state.thread_id = thread.id
+            #st.write("id da thread: ", thread.id)
+        else:
+            st.sidebar.warning("Por favor, clique em \"Iniciar análise\" iniciar o chat")
+
 
 if st.session_state.start_chat:
-    on = st.sidebar.toggle('Ver sugestões de perguntas')
+    on = st.sidebar.toggle('Ver sugestões de perguntas', value=True)
+    search = st.sidebar.text_input("Pesquisar perguntas sugeridas")
 
     if on:
         for indice, pergunta in enumerate(perguntas):
             # st.sidebar.write(f"<a style=\"color:white;display:flex;align-items:center;gap:26px;text-decoration:none\" target=\"_self\" id=\"pergunta{indice}\" href=\"javascript:(function(){{var conteudo = document.getElementById('pergunta{indice}').innerText; navigator.clipboard.writeText(conteudo).then(function() {{ console.log('Conteúdo copiado para a área de transferência: ' + conteudo); }}, function(err) {{ console.error('Erro ao copiar conteúdo: ', err); }});}})()\">{pergunta}<span>{icon_copy}</span></a>", unsafe_allow_html=True)
-            if st.sidebar.button(f"{pergunta}"):
-                pergunta_ = pergunta
+            if unidecode(search.lower()) in unidecode(pergunta.lower()):
+                if st.sidebar.button(f"{pergunta}"):
+                    pergunta_ = pergunta
 
     st.sidebar.write('<style>label[data-baseweb="checkbox"] > div > div {background: #282828}</style>', unsafe_allow_html=True)
-
-# Função para copiar o texto para a área de transferência
-
 # Define a função para iniciar
 def process_message_with_citations(message):
     """Extract content and annotations from the message and format citations as footnotes."""
@@ -171,17 +178,22 @@ st.subheader("ANÁLISE DE CLIENTES")
 if st.session_state.start_chat:
     # Inicializa o modelo usado
     if "openai_model" not in st.session_state:
-        st.session_state.openai_model = "gpt-4-1106-preview"
+        st.session_state.openai_model = "gpt-4-turbo-preview"
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
     # Mostra mensagens anteriores
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+            if message["typeFile"] == "text":
+                st.markdown(message["content"], unsafe_allow_html=True)
+
+            if message["typeFile"] == "image":
+                image = getImage(message["content"])
+                st.image(image)
 
 
-    prompt_ =  st.chat_input("Faça uma pergunta!")
+    prompt_ =  st.chat_input("Faça uma pergunta!" )
 
     if pergunta_ :
         prompt = pergunta_
@@ -192,15 +204,16 @@ if st.session_state.start_chat:
     # Campo pro usuário escrever
     if prompt:
         # Adiciona as mensagens do usuário e mostra no chat
-        st.session_state.messages.append({"role": "user", "content": prompt})
+        st.session_state.messages.append({"role": "user", "content": prompt, "typeFile":"text"})
         with st.chat_message("user"):
-            st.markdown(prompt)
+            st.markdown(prompt, unsafe_allow_html=True)
 
         # Adiciona as mensagens criadas na thread
         client.beta.threads.messages.create(
             thread_id=st.session_state.thread_id,
             role="user",
-            content=prompt
+            content=prompt,
+            file_ids=st.session_state.file_id_list
         )
 
         # Cria a requisição com mais instruções
@@ -210,6 +223,7 @@ if st.session_state.start_chat:
             instructions="Por favor, responda as perguntas usando o conteúdo do arquivo. Quando adicionar informações externas, seja claro e mostre essas informações em outra cor."
         )
 
+
         # Pedido para finalizar a requisição e retornar as mensagens do assistente
         while run.status != 'completed':
             time.sleep(1)
@@ -218,6 +232,8 @@ if st.session_state.start_chat:
                 run_id=run.id
             )
 
+
+
         # Retorna as mensagens do assistente
         messages = client.beta.threads.messages.list(
             thread_id=st.session_state.thread_id
@@ -225,14 +241,28 @@ if st.session_state.start_chat:
 
         # Processa e mostra as mensagens do assistente
         assistant_messages_for_run = [
-            message for message in messages 
+            message for message in messages
             if message.run_id == run.id and message.role == "assistant"
         ]
-        for message in assistant_messages_for_run:
-            full_response = process_message_with_citations(message)
-            st.session_state.messages.append({"role": "assistant", "content": full_response})
-            with st.chat_message("assistant"):
-                st.markdown(full_response, unsafe_allow_html=True)
+        for message in assistant_messages_for_run[::-1]:
+            #print(message)
+            if message.content[0].type == "text":
+                full_response = process_message_with_citations(message)
+                st.session_state.messages.append({"role": "assistant", "content": full_response, "typeFile" :"text"})
+
+                with st.chat_message("assistant"):
+                    st.markdown(full_response, unsafe_allow_html=True)
+
+            if message.content[0].type == "image_file":
+                image = getImage(message.content[0].image_file.file_id)
+                if image:
+                    st.session_state.messages.append({"role": "assistant", "content": message.content[0].image_file.file_id, "typeFile" : "image"})
+                    with st.chat_message("assistant"):
+                        st.image(getImage(message.content[0].image_file.file_id))
+
+
+
+
 else:
     # Prompt pra iniciar o chat
     st.write("Por favor, selecione o(s) arquivo(s) e clique em *iniciar chat* para gerar respostas")
