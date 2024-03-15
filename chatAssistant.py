@@ -20,7 +20,7 @@ import pandas as pd
 
 load_dotenv()
 #id do assistente
-assistant_id = "asst_519rR4UyOVXn2Epn8qR7RSa8"
+assistant_id = "asst_xtYbsxpLumPBvxrytbr1fex4"
 
 # inicializa cliente openai
 client = openai
